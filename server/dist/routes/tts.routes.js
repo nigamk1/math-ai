@@ -4,13 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const tts_controller_1 = require("../controllers/tts.controller"); // Import the controller function
+const tts_controller_1 = require("../controllers/tts.controller");
+const asyncHandler_1 = require("../service/asyncHandler");
 const router = express_1.default.Router();
-const asyncHandler = (fn) => {
-    return (req, res, next) => {
-        fn(req, res).catch(next);
-    };
-};
-// Route for generating TTS audio
-router.post('/', asyncHandler(tts_controller_1.handleTTS)); // Use the controller function to handle the POST request
+// Endpoint to handle TTS generation
+router.post('/', (0, asyncHandler_1.asyncHandler)(tts_controller_1.handleTTS));
 exports.default = router;

@@ -14,13 +14,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.generateTTS = void 0;
 const axios_1 = __importDefault(require("axios"));
-// Function to generate TTS audio
-const generateTTS = (text, voice) => __awaiter(void 0, void 0, void 0, function* () {
+const generateTTS = (text, voiceId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // Example: Call a third-party TTS API (replace with your actual TTS API)
-        const response = yield axios_1.default.post('https://api.example.com/tts', { text, voice }, { responseType: 'arraybuffer' } // Ensure the response is returned as a Buffer
-        );
-        // Return the audio buffer
+        const response = yield axios_1.default.post(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`, {
+            text,
+            model_id: 'eleven_monolingual_v1',
+            voice_settings: {
+                stability: 0.5,
+                similarity_boost: 0.75,
+            },
+        }, {
+            headers: {
+                'xi-api-key': process.env.ELEVENLABS_API_KEY,
+                'Content-Type': 'application/json',
+            },
+            responseType: 'arraybuffer',
+        });
         return Buffer.from(response.data);
     }
     catch (error) {
